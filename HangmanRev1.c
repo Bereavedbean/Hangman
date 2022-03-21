@@ -1,3 +1,4 @@
+
 //This is the first revision of the hangman project (same as the morbid childhood game)
 //
 
@@ -26,9 +27,9 @@ int main(void)
 
     //for the actual game
     char hangArray [2] [30];
-    int i, j, randNum, counter, lives;
+    int i, j, randNum, counter, lives, localGuesses;
     char guessInput;
-    bool notFinished = true;
+    bool notFinished = true, doubleGuess;
         //used for loop within game
         char quit;
 
@@ -60,56 +61,57 @@ int main(void)
 
         //Add in some words to the wordlist
         char wordList[50] [30] ={
-        "pen",
-        "pencil",
-        "drone",
-        "user",
-        "computer",
-        "mouse",
-        "keyboard",
-        "ethernet",
-        "windows",
-        "mac",
-        "linux",
-        "trackpad",
-        "processor",
-        "laptop",
-        "desktop",
-        "playdoh",
-        "glasses",
-        "water",
-        "bottle",
-        "rocket",
-        "paper",
-        "poster",
-        "router",
-        "competition",
-        "university",
-        "steel",
-        "steal",
-        "think",
-        "center",
-        "intellignt",
-        "faith",
-        "piety",
-        "sin",
-        "place",
-        "pace",
-        "pandemic",
-        "cross",
-        "cost",
-        "power",
-        "wrath",
-        "drunk",
-        "drink",
-        "stink",
-        "apple",
-        "orange",
-        "black",
-        "green",
-        "white",
-        "red",
-        "chick"
+        {'p', 'e', 'n'},
+        {'p', 'e', 'n', 'c', 'i', 'l'},
+        {'d', 'r', 'o', 'n', 'e'},
+        {'u', 's', 'e', 'r'},
+        {'c', 'o', 'm', 'p', 'u', 't', 'e', 'r'},
+        {'m', 'o', 'u', 's', 'e'},
+        {'k', 'e', 'y', 'b', 'o', 'a', 'r', 'd'},
+        {'e', 't', 'h', 'e', 'r', 'n', 'e', 't'},
+        {'w', 'i', 'n', 'd', 'o', 'w', 's'},
+        {'m', 'a', 'c'},
+        {'l', 'i', 'n', 'u', 'x'},
+        {'t', 'r', 'a', 'c', 'k', 'p', 'a', 'd'},
+        {'p', 'r', 'o', 'c', 'e', 's', 's', 'o', 'r'},
+        {'l', 'a', 'p', 't', 'o', 'p'},
+        {'d', 'e', 's', 'k', 't', 'o', 'p'},
+        {'p', 'l', 'a', 'y', 'd', 'o', 'h'},
+        {'g', 'l', 'a', 's', 's', 'e', 's'},
+        {'w', 'a', 't', 'e', 'r'},
+        {'b', 'o', 't', 't', 'l', 'e'},
+        {'r', 'o', 'c', 'k', 'e', 't'},
+        {'p', 'a', 'p', 'e', 'r'},
+        {'p', 'o', 's', 't', 'e', 'r'},
+        {'r', 'o', 'u', 't', 'e', 'r'},
+        {'c', 'o', 'm', 'p', 'e', 't', 'i', 't', 'i', 'o', 'n'},
+        {'u', 'n', 'i', 'v', 'e', 'r', 's', 'i', 't', 'y'},
+        {'s', 't', 'e', 'e', 'l'},
+        {'s', 't', 'e', 'a', 'l'},
+        {'t', 'h', 'i', 'n', 'k'},
+        {'c', 'e', 'n', 't', 'e', 'r'},
+        {'i', 'n', 't', 'e', 'l', 'i', 'g', 'e', 'n', 't'},
+        {'f', 'a', 'i', 't', 'h'},
+        {'p', 'i', 'e', 't', 'y'},
+        {'s', 'i', 'n'},
+        {'p', 'l', 'a', 'c', 'e'},
+        {'p', 'a', 'c', 'e'},
+        {'p', 'a', 'n', 'd', 'e', 'm', 'i', 'c'},
+        {'c', 'r', 'o', 's', 's'},
+        {'c', 'o', 's', 't'},
+        {'p', 'o', 'w', 'e', 'r'},
+        {'w', 'r', 'a', 't', 'h'},
+        {'d', 'r', 'u', 'n', 'k'},
+        {'d', 'r', 'i', 'n', 'k'},
+        {'s', 't', 'i', 'n', 'g'},
+        {'o', 'r', 'a', 'n', 'g', 'e'},
+        {'a', 'p', 'p', 'l', 'e'},
+        {'b', 'l', 'a', 'c', 'k'},
+        {'g', 'r', 'e', 'e', 'n'},
+        {'w', 'h', 'i', 't', 'e'},
+        {'r', 'e', 'd'},
+        {'c', 'h', 'i', 'c', 'k', 'e', 'n'},
+        {'w', 'i', 'r', 'e', 'l', 'e', 's', 's'}
         };
 
         //generate random number for selection
@@ -129,6 +131,8 @@ int main(void)
             }
         ///////////////////////////
         //begins the game that needs to be looped
+    localGuesses = 0;
+    char stringChecker[30] = {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'};
     lives = 0;
     do {
     printf("\nCurrent score : %d", totalpoints);
@@ -148,10 +152,28 @@ int main(void)
             }
         }
 
-    //receives input for game
+    //receives input for game and checks for duplicates
+    do {
+    doubleGuess = false;
     printf("\nPlease enter a letter to guess : ");
     scanf(" %c", &guessInput);
     guessInput = tolower(guessInput);
+
+    for (i = 0; i < 30; i++)
+        {
+        //printf("Testing %c : %c : %d", guessInput, stringChecker[i], i);
+         if (guessInput == stringChecker[i])
+                {
+                doubleGuess = true;
+                //printf("It worked%c", guessInput);
+                }
+        }
+
+    if (doubleGuess)
+        printf("Please enter a valid guess (No double guessing)");
+    } while (doubleGuess);
+    stringChecker [localGuesses] = guessInput;
+    localGuesses += 1;
     totalGuesses += 1;
     //checks for right answers
     counter = 0;
@@ -198,10 +220,12 @@ int main(void)
             {
             totalpoints += 100;
             totalWins += 1;
+            printf("\nCongrats on getting it right!!");
             }
         else
             {
             totalLosses +=1;
+            printf("\nSorry, you didn't get it");
             }
 
         lives = 0;
@@ -213,6 +237,8 @@ int main(void)
             if (hangArray[0] [i] != '_')
                 printf("%c", hangArray [0] [i]);
             }
+        printf("\n");
+        initialmenu();
         break;
 
         //Display the stats
@@ -247,7 +273,7 @@ int main(void)
 int initialmenu(void)
 {
     printf("\nWelcome to hangman!\n");
-    printf("Enter 0 to play a round\n");
+    printf("Enter 0 to show the initial menu\n");
     printf("Enter 1 to play a round\n");
     printf("Enter 2 to view stats\n");
     printf("Enter 3 to exit the game\n");
@@ -267,7 +293,6 @@ int hangDisplay (char array [2] [30])
             {
             printf("_ ");
             }
-
         }
 }
 */
@@ -283,10 +308,8 @@ char wordgrabber(void)
         {
         word[1][i] = '_';
         }
-
     //Add in some words to the wordlist
     char wordList[10] [30] ={
-
     "user",
     "computer",
     "mouse",
@@ -298,12 +321,9 @@ char wordgrabber(void)
     "trackpad",
     "processor"
     };
-
     //generate random number for selection
     int randNum;
-
     randNum = rand() % 10;
-
     //Sets up Word finally
     for (i = 0; i < 30; i++)
         {
@@ -314,12 +334,10 @@ char wordgrabber(void)
             word [0] [i] = "_";
             }
         }
-
     for ( i = 0; i < 30; i++)
         {
         printf("%d, %c %c, \n", i, word[0] [i], word[1] [i]);
         }
-
     return word;
 }
 */
