@@ -1,5 +1,5 @@
 
-//This is the first revision of the hangman project (same as the morbid childhood game)
+//This is the second revision of the hangman project (same as the morbid childhood game)
 //
 
 //libraries
