@@ -1,0 +1,1 @@
+//You need to make this file and it needs to be completely empty. I reccoment using touch on Linux or type nul > scoreboard.txt on Windows.
